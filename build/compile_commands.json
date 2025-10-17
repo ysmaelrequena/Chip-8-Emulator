@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build",
+  "command": "/usr/bin/gcc -I/home/ysmael/proyectos/Clang/8-CHIP_emulator/include -g -std=c17 -o CMakeFiles/8chip.dir/src/cpu.c.o -c /home/ysmael/proyectos/Clang/8-CHIP_emulator/src/cpu.c",
+  "file": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/src/cpu.c",
+  "output": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build/CMakeFiles/8chip.dir/src/cpu.c.o"
+},
+{
+  "directory": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build",
+  "command": "/usr/bin/gcc -I/home/ysmael/proyectos/Clang/8-CHIP_emulator/include -g -std=c17 -o CMakeFiles/8chip.dir/src/display.c.o -c /home/ysmael/proyectos/Clang/8-CHIP_emulator/src/display.c",
+  "file": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/src/display.c",
+  "output": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build/CMakeFiles/8chip.dir/src/display.c.o"
+},
+{
+  "directory": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build",
+  "command": "/usr/bin/gcc -I/home/ysmael/proyectos/Clang/8-CHIP_emulator/include -g -std=c17 -o CMakeFiles/8chip.dir/src/input.c.o -c /home/ysmael/proyectos/Clang/8-CHIP_emulator/src/input.c",
+  "file": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/src/input.c",
+  "output": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build/CMakeFiles/8chip.dir/src/input.c.o"
+},
+{
+  "directory": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build",
+  "command": "/usr/bin/gcc -I/home/ysmael/proyectos/Clang/8-CHIP_emulator/include -g -std=c17 -o CMakeFiles/8chip.dir/src/main.c.o -c /home/ysmael/proyectos/Clang/8-CHIP_emulator/src/main.c",
+  "file": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/src/main.c",
+  "output": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build/CMakeFiles/8chip.dir/src/main.c.o"
+},
+{
+  "directory": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build",
+  "command": "/usr/bin/gcc -I/home/ysmael/proyectos/Clang/8-CHIP_emulator/include -g -std=c17 -o CMakeFiles/8chip.dir/src/opcodes.c.o -c /home/ysmael/proyectos/Clang/8-CHIP_emulator/src/opcodes.c",
+  "file": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/src/opcodes.c",
+  "output": "/home/ysmael/proyectos/Clang/8-CHIP_emulator/build/CMakeFiles/8chip.dir/src/opcodes.c.o"
+}
+]
