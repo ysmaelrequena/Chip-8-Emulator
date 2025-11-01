@@ -23,7 +23,6 @@ typedef struct {
     
 } chip_8;
 
-chip_8 cpu;
 
 void load_ROM(char const *filename, chip_8 *cpu);
 void load_fontset();

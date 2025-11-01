@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "display.h"
+#include "cpu.h"
+#include "opcodes.h"
 #pragma once
 
 void init_SDL(void) {
@@ -11,18 +13,18 @@ void init_SDL(void) {
     } else {
         return true;
     };
-}
-
-void final_cleanup(void) {
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyTexture(texture);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-}
+};
 
 int main() {
 
-    bool app_state = true;
+    //Declare the window, renderer and texture as global variables within my stack, so my initialization, update and cleanup functions can use them
+
+    SDL_Window* window;
+    SDL_Renderer* renderer;
+    SDL_Texture* texture;
+
+    bool running = true;
+    chip_8 cpu = { 0 };
     
     //Boot sequence
     if(!init_SDL) exit(EXIT_FAILURE);
@@ -31,14 +33,11 @@ int main() {
     //Create window
     display_init();
     
-    while (app_state == true) { //main loop
+    while (running == true) { //main loop
         
-        if (app_state != true) {
+        if (running != true) {
             final_cleanup();
         };
-
-        
-
-    } 
+    }; 
     return 0;
 }

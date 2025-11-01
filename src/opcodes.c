@@ -1,6 +1,5 @@
 #pragma once
-#include "cpu.h"
-
+#include "opcodes.h"
 
 //OPCODES
 
@@ -36,8 +35,6 @@ void OP_3xkk(chip_8 *cpu) {
 
     if (cpu->registers[vx] == kk) {
         cpu->program_counter += 4;
-    } else {
-        cpu->program_counter += 2;
     };
 };
 
@@ -48,8 +45,6 @@ void OP_4xkk(chip_8 *cpu) {
 
     if (cpu->registers[vx] != kk) {
         cpu->program_counter += 4;
-    } else {
-        cpu->program_counter += 2;
     };
 };
 
@@ -60,8 +55,6 @@ void OP_5xy0(chip_8 *cpu) {
 
     if (cpu->registers[vx] == cpu->registers[vy]) {
         cpu->program_counter += 4;
-    } else {
-        cpu->program_counter += 2;
     };
 };
 
@@ -202,7 +195,7 @@ void OP_Bnnn(chip_8 *cpu) {
 };
 
 //cxkk - The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
-void OP_cxkk(chip_8 *cpu) {
+void OP_Cxkk(chip_8 *cpu) {
     uint8_t vx = (cpu->opcode & 0x0F00u) >> 8;
     uint8_t kk = cpu->opcode & 0x00FFu;
     int random_number = rand() % 256;
@@ -245,8 +238,6 @@ void OP_Ex9E(chip_8 *cpu) {
 
     if (cpu->keys[cpu->registers[vx]]) {
         cpu->program_counter += 4;
-    } else {
-        cpu->program_counter += 2;
     };
 };
 
@@ -256,8 +247,6 @@ void OP_ExA1(chip_8 *cpu) {
 
     if (cpu->keys[cpu->registers[vx]] == 0) {
         cpu->program_counter += 4;
-    } else {
-        cpu->program_counter += 2;
     };
 };
 
@@ -266,8 +255,6 @@ void OP_Fx07(chip_8 *cpu) {
     uint8_t vx = cpu->opcode & 0x0F00u >> 8u;
 
     cpu->delay_timer = cpu->registers[vx];
-
-    cpu->program_counter += 2;
 };
 
 //Fx0A Wait for a key press, store the value of the key in Vx. All execution stops until a key is pressed, then the value of that key is stored in Vx.
@@ -278,7 +265,6 @@ void OP_Fx0A(chip_8 *cpu) {
         
         if (cpu->keys[i] == 1) {
             cpu->registers[vx] = i;
-            cpu->program_counter += 2;
             return;
         } else if (cpu->keys[i] == 0){
             continue;
@@ -342,7 +328,7 @@ void OP_Fx55(chip_8 *cpu) {
 
     for (uint8_t i = 0; i <= vx; i++) {
         cpu->memory[index + i] = cpu->registers[i];
-    };
+    }
 };
 
 //Fx65 - Read registers V0 through Vx from memory starting at location I.
@@ -351,5 +337,97 @@ void OP_Fx65(chip_8 *cpu) {
 
     for (uint8_t i = 0; i <= vx; i++) {
         cpu->registers[i] = cpu->memory[cpu->index];
+    };
+};
+
+//Table of function pointers:
+
+void (*funcTable0[0xF])(chip_8 *cpu) = { //They all start with 00E but the last digit is different.
+    [0x00] = OP_00E0,
+    [0x0E] = OP_00EE,
+};
+
+void (*funcTable8[0xF + 1])(chip_8 *cpu) = { //The last digit is different
+    [0x00] = OP_8xy0,
+    [0x01] = OP_8xy1, 
+    [0x02] = OP_8xy2,
+    [0x03] = OP_8xy3,
+    [0x04] = OP_8xy4, 
+    [0x05] = OP_8xy5, 
+    [0x06] = OP_8xy6,
+    [0x07] = OP_8xy7, 
+    [0x0E] = OP_8xyE,
+};
+
+void (*funcTableE[0xE + 1])(chip_8 *cpu) = { //First digit repeats but the last two are different
+    [0x01] = OP_ExA1, 
+    [0x0E] = OP_Ex9E,
+};
+
+void (*funcTableF[0x66])(chip_8 *cpu) = { //Same as above, but the notation starts with F.
+    [0x07] = OP_Fx07, 
+    [0x0A] = OP_Fx0A,
+    [0x15] = OP_Fx15, 
+    [0x18] = OP_Fx18,
+    [0x1E] = OP_Fx1E, 
+    [0x29] = OP_Fx29,
+    [0x33] = OP_Fx33,
+    [0x55] = OP_Fx55,
+    [0x65] = OP_Fx65,
+};
+
+void (*mainFuncTable[16])(chip_8 *cpu) = {
+   [0x00] = handleFuncTable0, 
+   [0x01] = OP_1nnn,
+   [0x02] = OP_2nnn,
+   [0x03] = OP_3xkk,
+   [0x04] = OP_4xkk, 
+   [0x05] = OP_5xy0,
+   [0x06] = OP_6xkk, 
+   [0x07] = OP_7xkk,
+   [0x08] = handleFuncTable8,
+   [0x09] = OP_9xy0, 
+   [0x0A] = OP_Annn, 
+   [0x0B] = OP_Bnnn,
+   [0x0C] = OP_Cxkk, 
+   [0x0D] = OP_Dxyn, 
+   [0x0E] = handleFuncTableE, 
+   [0x0F] = handleFuncTableF, 
+};
+
+//Handler functions for sub tables
+void handleFuncTable0(chip_8 *cpu) {
+    uint8_t index = cpu->opcode & 0x000Fu;
+    
+    funcTable0[index](cpu);
+};
+
+void handleFuncTable8(chip_8 *cpu) {
+    uint8_t index = cpu->opcode & 0x000Fu;
+
+    funcTable8[index](cpu);
+};
+
+void handleFuncTableE(chip_8 *cpu) {
+    uint8_t index = cpu->opcode & 0x000Fu;
+
+    funcTableE[index](cpu);
+};
+
+void handleFuncTableF(chip_8 *cpu) {
+    uint8_t index = cpu->opcode & 0x00FFu;
+
+    funcTableF[index](cpu);
+};
+
+void handleMainFuncTable(chip_8 *cpu) { //Now we just determine the index of where the opcode is located and execute it.
+    uint8_t index = (cpu->opcode & 0xF000u) >> 12u;
+
+    printf("Executing opcode: %x", cpu->opcode); 
+
+    mainFuncTable[index](cpu);
+
+    if (!mainFuncTable[index]) {
+        perror("Opcode operation not found:");
     };
 };

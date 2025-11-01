@@ -1,25 +1,25 @@
 #pragma once
 #include "cpu.h"
+#include "opcodes.h"
 
 
 
 const unsigned int INIT_ADDRESS = START_ADDRESS;
-const chip_8 *cpuPtr = &cpu;
 
 void load_ROM(char const *filename, chip_8 *cpu) {
 
+    FILE *ROM = fopen(filename, "rb"); //Look for the ROM and open it in Read Only mode.
+    
     if (filename == NULL) {
         printf("An error has ocurred %d\n", errno);
         perror("Error message");
     };
     
-    fopen(filename, "rb");
-    fseek(filename, 0, SEEK_END);
+    fseek(ROM, 0, SEEK_END);
     long size = ftell(filename);
-    rewind(filename);
-    fread(cpu->memory[0x200], 1, size, filename);
-    fclose(filename);
-    cpu->program_counter = START_ADDRESS;
+    rewind(ROM);
+    fread(cpu->memory + 0x200, 1, size, ROM);
+    fclose(ROM);
 };
 
 void load_fontset(chip_8 *cpu) {
@@ -50,5 +50,29 @@ void load_fontset(chip_8 *cpu) {
     };
 };
 
-//TODO, Handlers for the opcodes in another document, and then a function pointer table that just
-//determines what to do with the code after decoding the first two bytes 
+void initialization(chip_8 *cpu, char filename){
+    cpu->program_counter = START_ADDRESS; //we initialize the program counter to the starting position.
+    load_fontset(cpu); // we load the fontset from address 0x50
+    load_ROM(cpu, filename); //Load the ROM in memory
+};
+
+void cycle(chip_8 *cpu) {
+    cpu->opcode = (cpu->memory[cpu->program_counter] << 8u) | cpu->memory[cpu->program_counter + 1]; //Decode opcode, first byte gets shifted to the left, then it is combined with the right one
+
+    if(!cpu->opcode) { //Erro handling
+        perror("Opcode is not valid");
+        return;
+    };
+
+    cpu->program_counter += 2; //The PC always gets increased by two, if an instruction gets skipped, the opcode's logic will take care of it.
+
+    handleMainFuncTable(cpu); //Call the index in my table with function pointers.
+
+    if (cpu->delay_timer > 0) {
+        --cpu->delay_timer;
+    };
+
+    if (cpu->sound_timer > 0) {
+        --cpu->sound_timer;
+    };
+};
