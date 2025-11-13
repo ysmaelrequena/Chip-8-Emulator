@@ -1,8 +1,7 @@
-#pragma once
 #include "input.h"
 
 
-void handle_input(chip_8 *cpu, bool *running) {
+bool handle_input(chip_8 *cpu, bool *running) {
 
     SDL_Event event;
 
@@ -194,4 +193,4 @@ void handle_input(chip_8 *cpu, bool *running) {
                 };
             };
         return running;
-    };
+    }

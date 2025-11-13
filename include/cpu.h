@@ -23,6 +23,7 @@ typedef struct {
     
 } chip_8;
 
-
-void load_ROM(char const *filename, chip_8 *cpu);
-void load_fontset();
+void load_ROM(FILE *filename, chip_8 *cpu);
+void load_fontset(chip_8 *cpu);
+void initialization(chip_8 *cpu, char *filename);
+void cycle(chip_8 *cpu);

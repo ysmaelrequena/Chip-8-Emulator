@@ -1,26 +1,24 @@
-#pragma once
 #include "cpu.h"
 #include "opcodes.h"
 
 
 
-const unsigned int INIT_ADDRESS = START_ADDRESS;
 
-void load_ROM(char const *filename, chip_8 *cpu) {
+void load_ROM(FILE *filename, chip_8 *cpu) {
 
     FILE *ROM = fopen(filename, "rb"); //Look for the ROM and open it in Read Only mode.
     
-    if (filename == NULL) {
+    if (ROM == NULL) {
         printf("An error has ocurred %d\n", errno);
         perror("Error message");
     };
     
     fseek(ROM, 0, SEEK_END);
-    long size = ftell(filename);
+    long size = ftell(ROM);
     rewind(ROM);
     fread(cpu->memory + 0x200, 1, size, ROM);
     fclose(ROM);
-};
+}
 
 void load_fontset(chip_8 *cpu) {
     const unsigned int FONTSET_SIZE = 80;
@@ -43,23 +41,23 @@ void load_fontset(chip_8 *cpu) {
             0xE0, 0x90, 0x90, 0x90, 0xE0, // D
             0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
             0xF0, 0x80, 0xF0, 0x80, 0x80  // F
-        };
+        }
 
     for (unsigned int i = 0; i < FONTSET_SIZE; ++i) {
         cpu->memory[FONTSET_START_ADDRESS + i] = fontset[i];
     };
-};
+}
 
-void initialization(chip_8 *cpu, char filename){
+void initialization(chip_8 *cpu, char *filename){
     cpu->program_counter = START_ADDRESS; //we initialize the program counter to the starting position.
     load_fontset(cpu); // we load the fontset from address 0x50
     load_ROM(cpu, filename); //Load the ROM in memory
-};
+}
 
 void cycle(chip_8 *cpu) {
     cpu->opcode = (cpu->memory[cpu->program_counter] << 8u) | cpu->memory[cpu->program_counter + 1]; //Decode opcode, first byte gets shifted to the left, then it is combined with the right one
 
-    if(!cpu->opcode) { //Erro handling
+    if(!cpu->opcode) { //Error handling
         perror("Opcode is not valid");
         return;
     };
@@ -75,4 +73,4 @@ void cycle(chip_8 *cpu) {
     if (cpu->sound_timer > 0) {
         --cpu->sound_timer;
     };
-};
+}

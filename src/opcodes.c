@@ -1,4 +1,3 @@
-#pragma once
 #include "opcodes.h"
 
 //OPCODES
@@ -6,19 +5,19 @@
 //00E0 CLS - Clear the screen
 void OP_00E0(chip_8 *cpu) {
     memset(0, cpu->gfx, sizeof(cpu->gfx));
-};
+}
 
 //00EE RET - The interpreter sets the program counter to the address at the top of the stack, then subtracts 1 from the stack pointer.
 void OP_00EE(chip_8 *cpu) {
     --cpu->stack_pointer;
     cpu->program_counter = cpu->stack[cpu->stack_pointer];
-};
+}
 
 //1nnn JMP - Jump to location nnn
 void OP_1nnn(chip_8 *cpu) {
     uint16_t address = cpu->opcode & 0x0FFFu;
     cpu->program_counter = address;
-};
+}
 
 //2nnn CALL - The interpreter increments the stack pointer, then puts the current PC on the top of the stack. The PC is then set to nnn.
 void OP_2nnn(chip_8 *cpu) {
@@ -26,7 +25,7 @@ void OP_2nnn(chip_8 *cpu) {
     ++cpu->stack_pointer;
     cpu->stack[cpu->stack_pointer] = cpu->program_counter;
     cpu->program_counter = address;  
-};
+}
 
 //3xkk Skip next instruction if Vx = kk.
 void OP_3xkk(chip_8 *cpu) {
@@ -36,7 +35,7 @@ void OP_3xkk(chip_8 *cpu) {
     if (cpu->registers[vx] == kk) {
         cpu->program_counter += 4;
     };
-};
+}
 
 //4xkk - Skip next instruction if Vx != kk.
 void OP_4xkk(chip_8 *cpu) {
@@ -46,7 +45,7 @@ void OP_4xkk(chip_8 *cpu) {
     if (cpu->registers[vx] != kk) {
         cpu->program_counter += 4;
     };
-};
+}
 
 //5xy0 - Skip next instruction if Vx = Vy.
 void OP_5xy0(chip_8 *cpu) {
@@ -56,7 +55,7 @@ void OP_5xy0(chip_8 *cpu) {
     if (cpu->registers[vx] == cpu->registers[vy]) {
         cpu->program_counter += 4;
     };
-};
+}
 
 //6xkk - Set Vx = kk.
 void OP_6xkk(chip_8 *cpu) {
@@ -64,7 +63,7 @@ void OP_6xkk(chip_8 *cpu) {
     uint8_t kk = cpu->opcode & 0x00FFu;
 
     cpu->registers[vx] = kk;
-};
+}
 
 //7xkk - Set Vx = Vx + kk.
 void OP_7xkk(chip_8 *cpu) {
@@ -73,7 +72,7 @@ void OP_7xkk(chip_8 *cpu) {
 
 
     cpu->registers[vx] += kk;
-};
+}
 
 //8xy0 - Set Vx = Vy.
 void OP_8xy0(chip_8 *cpu) {
@@ -81,7 +80,7 @@ void OP_8xy0(chip_8 *cpu) {
     uint8_t vy = (cpu->opcode & 0x00F0u) >> 4u;
 
     cpu->registers[vx] = cpu->registers[vy];
-};
+}
 
 //8xy1 - Set Vx = Vx OR Vy
 void OP_8xy1(chip_8 *cpu) {
@@ -89,7 +88,7 @@ void OP_8xy1(chip_8 *cpu) {
     uint8_t vy = (cpu->opcode & 0x00F0u) >> 4u;
 
     cpu->registers[vx] |= cpu->registers[vy];
-};
+}
 
 //8xy2 - Set Vx = Vx AND Vy.
 void OP_8xy2(chip_8 *cpu) {
@@ -97,7 +96,7 @@ void OP_8xy2(chip_8 *cpu) {
     uint8_t vy = (cpu->opcode & 0x00F0u) >> 4u;
 
     cpu->registers[vx] &= cpu->registers[vy];
-};
+}
 
 //8xy3 - Set Vx = Vx XOR Vy.
 void OP_8xy3(chip_8 *cpu) {
@@ -105,7 +104,7 @@ void OP_8xy3(chip_8 *cpu) {
     uint8_t vy = (cpu->opcode & 0x00F0u) >> 4u;
 
     cpu->registers[vx] ^= cpu->registers[vy];
-};
+}
 
 //8xy4 - ADD Vx, Vy
 void OP_8xy4(chip_8 *cpu) {
@@ -121,7 +120,7 @@ void OP_8xy4(chip_8 *cpu) {
     };
 
     cpu->registers[vx] = sum & 0xFFu;
-};
+}
 
 //8xy5 - Set Vx = Vx - Vy, set VF = NOT borrow
 void OP_8xy5(chip_8 *cpu) {
@@ -136,7 +135,7 @@ void OP_8xy5(chip_8 *cpu) {
 
     uint16_t subtraction = cpu->registers[vx] - cpu->registers[vy];
     cpu->registers[vx] = subtraction;
-};
+}
 
 //8xy6 - If the least-significant bit of Vx is 1, then VF is set to 1, otherwise 0. Then Vx is divided by 2.
 void OP_8xy6(chip_8 *cpu) {
@@ -145,7 +144,7 @@ void OP_8xy6(chip_8 *cpu) {
     cpu->registers[15] = cpu->registers[vx] & 0x01u;
 
     cpu->registers[vx] >>= 1; //Every bit shift by one, is a division of the original value by 2; 
-};
+}
 
 //8xy7 - If Vy > Vx, then VF is set to 1, otherwise 0. Then Vx is subtracted from Vy, and the results stored in Vx.
 void OP_8xy7(chip_8 *cpu) {
@@ -159,7 +158,7 @@ void OP_8xy7(chip_8 *cpu) {
     };
 
     cpu->registers[vx] -= cpu->registers[vy];
-};
+}
 
 //8xyE - If the most-significant bit of Vx is 1, then VF is set to 1, otherwise to 0. Then Vx is multiplied by 2.
 void OP_8xyE(chip_8 *cpu) {
@@ -168,7 +167,7 @@ void OP_8xyE(chip_8 *cpu) {
     cpu->registers[15] = cpu->registers[vx] & 0x80u;8;
 
     cpu->registers[vx] <<= 1; //The opposite of 8xy6
-};
+}
 
 //9xy0 - The values of Vx and Vy are compared, and if they are not equal, the program counter is increased by 2.
 void OP_9xy0(chip_8 *cpu) {
@@ -178,21 +177,21 @@ void OP_9xy0(chip_8 *cpu) {
     if (cpu->registers[vx] != cpu->registers[vy]) {
         cpu->program_counter +=2;
     };
-};
+}
 
 //Annn - The value of register I is set to nnn.
 void OP_Annn(chip_8 *cpu) {
     uint16_t address = cpu->opcode & 0x0FFFu;
 
     cpu->index = address;
-};
+}
 
 //Bnnn - The program counter is set to nnn plus the value of V0.
 void OP_Bnnn(chip_8 *cpu) {
     uint16_t address = cpu->opcode & 0x0FFFu;
 
     cpu->program_counter = address + cpu->registers[0];
-};
+}
 
 //cxkk - The interpreter generates a random number from 0 to 255, which is then ANDed with the value kk. The results are stored in Vx. See instruction 8xy2 for more information on AND.
 void OP_Cxkk(chip_8 *cpu) {
@@ -201,7 +200,7 @@ void OP_Cxkk(chip_8 *cpu) {
     int random_number = rand() % 256;
 
     cpu->registers[vx] = kk & random_number;
-};
+}
 
 //Dxyn - Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision.
 void OP_Dxyn(chip_8 *cpu) {
@@ -230,7 +229,7 @@ void OP_Dxyn(chip_8 *cpu) {
             };
         }; 
     };
-};
+}
 
 // Ex9E - Skip next instruction if key with the value of Vx is pressed.
 void OP_Ex9E(chip_8 *cpu) {
@@ -239,7 +238,7 @@ void OP_Ex9E(chip_8 *cpu) {
     if (cpu->keys[cpu->registers[vx]]) {
         cpu->program_counter += 4;
     };
-};
+}
 
 //ExA1 - Skip next instruction if key with the value of Vx is not pressed.
 void OP_ExA1(chip_8 *cpu) {
@@ -248,14 +247,14 @@ void OP_ExA1(chip_8 *cpu) {
     if (cpu->keys[cpu->registers[vx]] == 0) {
         cpu->program_counter += 4;
     };
-};
+}
 
 //Fx07 - Set Vx = delay timer value.
 void OP_Fx07(chip_8 *cpu) {
     uint8_t vx = cpu->opcode & 0x0F00u >> 8u;
 
     cpu->delay_timer = cpu->registers[vx];
-};
+}
 
 //Fx0A Wait for a key press, store the value of the key in Vx. All execution stops until a key is pressed, then the value of that key is stored in Vx.
 void OP_Fx0A(chip_8 *cpu) {
@@ -273,28 +272,28 @@ void OP_Fx0A(chip_8 *cpu) {
         } 
 
     }; 
-};
+}
 
 //Fx15 - Set delay timer = Vx
 void OP_Fx15(chip_8 *cpu) {
     uint8_t vx = cpu->opcode & 0x0F00u >> 8u;
 
     cpu->delay_timer = cpu->registers[vx]; 
-};
+}
 
 //Fx18 - Set sound timer = Vx
 void OP_Fx18(chip_8 *cpu) {
     uint8_t vx = cpu->opcode & 0x0F00u >> 8u;
 
     cpu->sound_timer = cpu->registers[vx];
-};
+}
 
 //Fx1E - Set I = I + vx
 void OP_Fx1E(chip_8 *cpu) {
     uint8_t vx = cpu->opcode & 0x0F00u >> 8u;
 
     cpu->index += cpu->registers[vx];
-};
+}
 
 //Fx29 - Set I = location of sprite for digit Vx.
 void OP_Fx29(chip_8 *cpu) {
@@ -302,7 +301,7 @@ void OP_Fx29(chip_8 *cpu) {
 
     cpu->index = FONTSET_START_ADDRESS + (cpu->registers[vx] * 5);
    
-};
+}
 
 //Fx33 - The interpreter takes the decimal value of Vx, and places the hundreds digit in memory at location in I, the tens digit at location I+1, and the ones digit at location I+2.
 void OP_Fx33(chip_8 *cpu) {
@@ -319,7 +318,7 @@ void OP_Fx33(chip_8 *cpu) {
 
    //Hundreds-place
    cpu->memory[cpu->index] = value % 10; 
-};
+}
 
 //Fx55 - Store registers V0 through Vx in memory starting at location I.
 void OP_Fx55(chip_8 *cpu) {
@@ -329,7 +328,7 @@ void OP_Fx55(chip_8 *cpu) {
     for (uint8_t i = 0; i <= vx; i++) {
         cpu->memory[index + i] = cpu->registers[i];
     }
-};
+}
 
 //Fx65 - Read registers V0 through Vx from memory starting at location I.
 void OP_Fx65(chip_8 *cpu) {
@@ -338,14 +337,14 @@ void OP_Fx65(chip_8 *cpu) {
     for (uint8_t i = 0; i <= vx; i++) {
         cpu->registers[i] = cpu->memory[cpu->index];
     };
-};
+}
 
 //Table of function pointers:
 
 void (*funcTable0[0xF])(chip_8 *cpu) = { //They all start with 00E but the last digit is different.
     [0x00] = OP_00E0,
     [0x0E] = OP_00EE,
-};
+}
 
 void (*funcTable8[0xF + 1])(chip_8 *cpu) = { //The last digit is different
     [0x00] = OP_8xy0,
@@ -357,12 +356,12 @@ void (*funcTable8[0xF + 1])(chip_8 *cpu) = { //The last digit is different
     [0x06] = OP_8xy6,
     [0x07] = OP_8xy7, 
     [0x0E] = OP_8xyE,
-};
+}
 
 void (*funcTableE[0xE + 1])(chip_8 *cpu) = { //First digit repeats but the last two are different
     [0x01] = OP_ExA1, 
     [0x0E] = OP_Ex9E,
-};
+}
 
 void (*funcTableF[0x66])(chip_8 *cpu) = { //Same as above, but the notation starts with F.
     [0x07] = OP_Fx07, 
@@ -374,7 +373,7 @@ void (*funcTableF[0x66])(chip_8 *cpu) = { //Same as above, but the notation star
     [0x33] = OP_Fx33,
     [0x55] = OP_Fx55,
     [0x65] = OP_Fx65,
-};
+}
 
 void (*mainFuncTable[16])(chip_8 *cpu) = {
    [0x00] = handleFuncTable0, 
@@ -393,32 +392,32 @@ void (*mainFuncTable[16])(chip_8 *cpu) = {
    [0x0D] = OP_Dxyn, 
    [0x0E] = handleFuncTableE, 
    [0x0F] = handleFuncTableF, 
-};
+}
 
 //Handler functions for sub tables
 void handleFuncTable0(chip_8 *cpu) {
     uint8_t index = cpu->opcode & 0x000Fu;
     
     funcTable0[index](cpu);
-};
+}
 
 void handleFuncTable8(chip_8 *cpu) {
     uint8_t index = cpu->opcode & 0x000Fu;
 
     funcTable8[index](cpu);
-};
+}
 
 void handleFuncTableE(chip_8 *cpu) {
     uint8_t index = cpu->opcode & 0x000Fu;
 
     funcTableE[index](cpu);
-};
+}
 
 void handleFuncTableF(chip_8 *cpu) {
     uint8_t index = cpu->opcode & 0x00FFu;
 
     funcTableF[index](cpu);
-};
+}
 
 void handleMainFuncTable(chip_8 *cpu) { //Now we just determine the index of where the opcode is located and execute it.
     uint8_t index = (cpu->opcode & 0xF000u) >> 12u;
@@ -430,4 +429,4 @@ void handleMainFuncTable(chip_8 *cpu) { //Now we just determine the index of whe
     if (!mainFuncTable[index]) {
         perror("Opcode operation not found:");
     };
-};
+}
