@@ -1,4 +1,5 @@
 #pragma once
+#include <SDL3/SDL_init.h>
 #include <SDL3/SDL_video.h> 
 #include <SDL3/SDL_render.h>
 #include <stdbool.h>
@@ -9,8 +10,9 @@
 #define WINDOW_H 320
 
 //Funtion declarations
-void display_init(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *texture);
 void exit_cleanup(SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *texture);
-void update(chip_8 *cpu, SDL_Window *window, SDL_Renderer *renderer, SDL_Texture *texture, int *pitch);
+void update(chip_8 *cpu, SDL_Renderer *renderer, SDL_Texture *texture, int pitch);
+
+
 
 //Pitch is the calculation of my pixel row width time the amount of bytes per pixels. Used in the update function 

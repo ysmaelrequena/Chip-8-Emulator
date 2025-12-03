@@ -1,0 +1,8 @@
+/home/ysmael/proyectos/Clang/chip_8/build/CMakeFiles/chip8.dir
+/home/ysmael/proyectos/Clang/chip_8/build/CMakeFiles/edit_cache.dir
+/home/ysmael/proyectos/Clang/chip_8/build/CMakeFiles/rebuild_cache.dir
+/home/ysmael/proyectos/Clang/chip_8/build/vendored/SDL/CMakeFiles/SDL3-shared.dir
+/home/ysmael/proyectos/Clang/chip_8/build/vendored/SDL/CMakeFiles/SDL3_test.dir
+/home/ysmael/proyectos/Clang/chip_8/build/vendored/SDL/CMakeFiles/SDL_uclibc.dir
+/home/ysmael/proyectos/Clang/chip_8/build/vendored/SDL/CMakeFiles/edit_cache.dir
+/home/ysmael/proyectos/Clang/chip_8/build/vendored/SDL/CMakeFiles/rebuild_cache.dir

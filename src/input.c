@@ -1,12 +1,11 @@
 #include "input.h"
 
 
-bool handle_input(chip_8 *cpu, bool *running) {
-
+void handle_input(chip_8 *cpu, bool *running) {
+    
     SDL_Event event;
 
         while (SDL_PollEvent(&event)) {
-            
             switch (event.type) {
 
                 case SDL_EVENT_QUIT:
@@ -16,11 +15,12 @@ bool handle_input(chip_8 *cpu, bool *running) {
 
                 case SDL_EVENT_KEY_DOWN:
                     {
+                        printf("A key was pressed: %d\n", event.key.key);
                         switch (event.key.key) {
 
                             case SDLK_ESCAPE:
                             {
-                                running = false;
+                                *running = false;
                             }; break;
 
                             case SDLK_1:
@@ -107,6 +107,7 @@ bool handle_input(chip_8 *cpu, bool *running) {
                 
                 case SDL_EVENT_KEY_UP:
                 {
+                    printf("A key was released: %d\n", event.key.key);
                         switch (event.key.key) {
                             
                             case SDLK_1:
@@ -192,5 +193,4 @@ bool handle_input(chip_8 *cpu, bool *running) {
                     }; break;
                 };
             };
-        return running;
     }

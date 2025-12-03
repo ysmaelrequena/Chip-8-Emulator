@@ -8,7 +8,6 @@
 #pragma once
 
 typedef struct {
-
     uint16_t opcode;
     uint16_t program_counter;
     uint16_t stack[16];
@@ -20,10 +19,9 @@ typedef struct {
     uint8_t sound_timer;
     uint8_t keys[16];
     uint8_t gfx[64 * 32];
-    
 } chip_8;
 
-void load_ROM(FILE *filename, chip_8 *cpu);
+void load_ROM(const char *filename, chip_8 *cpu);
 void load_fontset(chip_8 *cpu);
-void initialization(chip_8 *cpu, char *filename);
+void initialization(chip_8 *cpu, const char *filename);
 void cycle(chip_8 *cpu);

@@ -2,5 +2,10 @@
     "files.associations": {
         "sdl_main.h": "c",
         "sdl_init.h": "c"
-    }
+    },
+    "clangd.path": "/usr/bin/clangd",
+    "clangd.arguments": [
+        "--background-index",
+    "--header-insertion=never"
+    ]
 }

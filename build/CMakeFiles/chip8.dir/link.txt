@@ -1,0 +1,1 @@
+/usr/bin/cc -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/chip8.dir/link.d CMakeFiles/chip8.dir/src/main.c.o CMakeFiles/chip8.dir/src/cpu.c.o CMakeFiles/chip8.dir/src/opcodes.c.o CMakeFiles/chip8.dir/src/display.c.o CMakeFiles/chip8.dir/src/input.c.o -o Release/chip8  -Wl,-rpath,/home/ysmael/proyectos/Clang/chip_8/build/Release Release/libSDL3.so.0.3.3

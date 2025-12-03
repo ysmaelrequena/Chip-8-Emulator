@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/ysmael/proyectos/Clang/chip_8/build/cmake_install.cmake",
+		"/home/ysmael/proyectos/Clang/chip_8/build/vendored/SDL/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

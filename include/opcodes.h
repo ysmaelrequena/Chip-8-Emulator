@@ -1,5 +1,4 @@
 #pragma once
-#include <stdio.h>
 #include "cpu.h"
 
 //Handler funtions for opcodes:
@@ -72,11 +71,11 @@ void OP_Fx55(chip_8 *cpu);
 void OP_Fx65(chip_8 *cpu);
 
 //Table of function pointers:
-void (*mainFuncTable[16])(chip_8 *cpu);
-void (*funcTable0[2])(chip_8 *cpu);
-void (*funcTable8[16])(chip_8 *cpu);
-void (*funcTableE[2])(chip_8 *cpu);
-void (*funcTableF[16])(chip_8 *cpu);
+extern void (*mainFuncTable[16])(chip_8 *cpu);
+extern void (*funcTable0[0xF])(chip_8 *cpu);
+extern void (*funcTable8[0xF + 1])(chip_8 *cpu);
+extern void (*funcTableE[0xE + 1])(chip_8 *cpu);
+extern void (*funcTableF[0x66])(chip_8 *cpu);
 
 //Handler functions for the tables that contain the function pointers:
 void handleFuncTable0(chip_8 *cpu);
